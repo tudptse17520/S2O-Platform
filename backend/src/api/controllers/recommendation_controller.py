@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from domain.services.recommendation_service import RecommendationService
+from services.recommendation_service import RecommendationService
 from infrastructure.embedding_service import EmbeddingService
 
 router = APIRouter()
