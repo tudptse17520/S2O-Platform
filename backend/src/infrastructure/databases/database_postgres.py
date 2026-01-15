@@ -1,29 +1,42 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
-import os
+from sqlalchemy.orm import sessionmaker, scoped_session
 
-# Ví dụ URL:
-# postgresql+psycopg2://username:password@localhost:5432/yourdb
-
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql+psycopg2://postgres:123456@localhost:5432/yourdb"
-)
-
-engine = create_engine(
-    DATABASE_URL,
-    echo=True,    # set=False nếu không muốn log query SQL
-)
-
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
+from .base import Base
 
 
-def get_db():
-    """Dependency cho FastAPI – cung cấp session cho repository."""
-    session = SessionLocal()
-    try:
-        yield session
-    finally:
-        session.close()
+class PostgresDatabase:
+    _engine = None
+    _Session = None
+
+    @classmethod
+    def init_app(cls, app):
+        database_url = app.config["SQLALCHEMY_DATABASE_URI"]
+
+        cls._engine = create_engine(
+            database_url,
+            pool_pre_ping=True,
+            echo=app.config.get("SQL_ECHO", False),
+        )
+
+        cls._Session = scoped_session(
+            sessionmaker(
+                bind=cls._engine,
+                autocommit=False,
+                autoflush=False,
+            )
+        )
+
+        @app.teardown_appcontext
+        def shutdown_session(exception=None):
+            cls._Session.remove()
+
+    @classmethod
+    def get_session(cls):
+        if cls._Session is None:
+            raise RuntimeError("PostgresDatabase is not initialized")
+        return cls._Session()
+
+    @classmethod
+    def create_all(cls):
+        Base.metadata.create_all(bind=cls._engine)
+
