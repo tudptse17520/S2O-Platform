@@ -1,18 +1,31 @@
 from domain.interfaces.ivector_repository import IVectorRepository
+from sqlalchemy.orm import Session
 
 class VectorRepository(IVectorRepository):
-
-    def __init__(self, db):
+    def __init__(self, db: Session):
         self.db = db
 
-    def upsert_vector(self, vector_id, embedding, metadata):
-        record = {
-            "id": vector_id,
-            "embedding": embedding,
-            "metadata": metadata
-        }
-        self.db.upsert(record)
-        return record
+    def save_vector(self, text: str, embedding: list):
+        sql = """
+            INSERT INTO embeddings (text, embedding)
+            VALUES (:text, :embedding)
+        """
 
-    def search_vector(self, embedding, top_k=5):
-        return self.db.search(embedding, top_k)
+        self.db.execute(sql, {"text": text, "embedding": embedding})
+        self.db.commit()
+
+    def search_vector(self, embedding: list, top_k: int = 5):
+        sql = """
+            SELECT text, embedding
+            FROM embeddings
+            ORDER BY embedding <-> :embedding
+            LIMIT :top_k
+        """
+
+        result = self.db.execute(sql, {
+            "embedding": embedding,
+            "top_k": top_k
+        })
+
+        return result.fetchall()
+
