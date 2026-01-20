@@ -188,6 +188,11 @@ cython_debug/
 #  you could uncomment the following to ignore the entire vscode folder
 # .vscode/
 
+# Templates and References
+TodolistAPI_templates.md
+S2O_Detail_Requirement_Description.md
+CODING_ROADMAP.md
+
 # Ruff stuff:
 .ruff_cache/
 
