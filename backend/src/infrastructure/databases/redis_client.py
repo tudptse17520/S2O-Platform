@@ -1,4 +1,7 @@
-import redis
+try:
+    import redis  # optional dependency
+except Exception:
+    redis = None
 
 
 class RedisClient:
@@ -6,6 +9,9 @@ class RedisClient:
 
     @classmethod
     def init_app(cls, app):
+        if redis is None:
+            raise RuntimeError("redis package is not installed")
+
         cls._client = redis.Redis(
             host=app.config.get("REDIS_HOST", "localhost"),
             port=app.config.get("REDIS_PORT", 6379),

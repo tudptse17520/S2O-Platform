@@ -58,42 +58,37 @@ def create_app():
             "version": "1.0.0"
         })
 
-    # Register API blueprints
-    from api.controllers import (
-        auth_controller,
-        tenant_controller,
-        branch_controller,
-        menu_controller,
-        order_controller,
-        payment_controller,
-        reservation_controller,
-        table_controller,
-        review_controller,
-        chatbot_controller,
-        recommendation_controller,
-        report_controller
-    )
+    # Register API blueprints dynamically and skip any that fail to import
+    import importlib
 
-    # Register all blueprints
-    blueprints = [
-        ("auth", auth_controller.auth_bp, "/api/v1/auth"),
-        ("tenant", tenant_controller.tenant_bp, "/api/v1/tenants"),
-        ("branch", branch_controller.branch_bp, "/api/v1/branches"),
-        ("menu", menu_controller.menu_bp, "/api/v1/menus"),
-        ("order", order_controller.order_bp, "/api/v1/orders"),
-        ("payment", payment_controller.payment_bp, "/api/v1/payments"),
-        ("reservation", reservation_controller.reservation_bp, "/api/v1/reservations"),
-        ("table", table_controller.table_bp, "/api/v1/tables"),
-        ("review", review_controller.review_bp, "/api/v1/reviews"),
-        ("chatbot", chatbot_controller.chatbot_bp, "/api/v1/chatbot"),
-        ("recommendation", recommendation_controller.recommendation_bp, "/api/v1/recommendations"),
-        ("report", report_controller.report_bp, "/api/v1/reports"),
+    controller_configs = [
+        ("auth_controller", "/api/v1/auth"),
+        ("tenant_controller", "/api/v1/tenants"),
+        ("branch_controller", "/api/v1/branches"),
+        ("menu_controller", "/api/v1/menus"),
+        ("order_controller", "/api/v1/orders"),
+        ("payment_controller", "/api/v1/payments"),
+        ("reservation_controller", "/api/v1/reservations"),
+        ("table_controller", "/api/v1/tables"),
+        ("review_controller", "/api/v1/reviews"),
+        ("chatbot_controller", "/api/v1/chatbot"),
+        ("recommendation_controller", "/api/v1/recommendations"),
+        ("report_controller", "/api/v1/reports"),
+        ("order_item_controller", "/api/v1/order-items"),
     ]
 
-    for name, bp, url_prefix in blueprints:
-        if bp:
-            app.register_blueprint(bp, url_prefix=url_prefix)
-            logger.info(f"Registered blueprint: {name} at {url_prefix}")
+    for module_name, url_prefix in controller_configs:
+        try:
+            mod = importlib.import_module(f"api.controllers.{module_name}")
+            prefix = module_name.replace("_controller", "")
+            bp = getattr(mod, f"{prefix}_bp", None)
+            if bp:
+                app.register_blueprint(bp, url_prefix=url_prefix)
+                logger.info(f"Registered blueprint: {prefix} at {url_prefix}")
+            else:
+                logger.warning(f"Controller {module_name} has no blueprint attribute; skipped")
+        except Exception as e:
+            logger.warning(f"Skipping controller {module_name} due to import error: {e}")
 
     # Error handlers
     @app.errorhandler(404)
@@ -111,3 +106,5 @@ def create_app():
             "code": 500,
             "message": "Internal server error"
         }), 500
+
+    return app
