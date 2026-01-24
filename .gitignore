@@ -192,6 +192,7 @@ cython_debug/
 TodolistAPI_templates.md
 S2O_Detail_Requirement_Description.md
 CODING_ROADMAP.md
+tempCodeRunnerFile.py
 
 # Ruff stuff:
 .ruff_cache/
