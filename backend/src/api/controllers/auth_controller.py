@@ -5,7 +5,7 @@ from src.services.auth_service import AuthService
 from src.infrastructure.postgres import get_db
 from src.infrastructure.repositories import SQLUserRepository, SQLTenantRepository
 
-auth_bp = Blueprint('auth', __name__, url_prefix='/api/v1/auth')
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @auth_bp.route('/register', methods=['POST'])
 def register():

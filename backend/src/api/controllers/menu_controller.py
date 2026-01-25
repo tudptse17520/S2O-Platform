@@ -7,7 +7,7 @@ from src.infrastructure.repositories import SQLCategoryRepository, SQLProductRep
 from ..middleware import auth_required
 from ..controllers.utils import standardize_response
 
-menu_bp = Blueprint('menu', __name__, url_prefix='/api/v1/menu')
+menu_bp = Blueprint('menu', __name__, url_prefix='/menu')
 
 @menu_bp.route('/categories', methods=['POST'])
 @auth_required(roles=['OWNER', 'STAFF', 'SYS_ADMIN'])
