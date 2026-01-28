@@ -2,7 +2,7 @@ import uuid
 from enum import Enum as PyEnum
 from sqlalchemy import Integer, Float, Enum, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
-from ..base import Base, UUIDMixin, TimestampMixin
+from ..databases.base import Base, UUIDMixin, TimestampMixin
 
 class OrderItemStatus(PyEnum):
     PENDING = "PENDING"

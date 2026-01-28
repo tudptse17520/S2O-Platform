@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import Integer, Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
-from ..base import Base, UUIDMixin, TimestampMixin
+from ..databases.base import Base, UUIDMixin, TimestampMixin
 
 class Review(Base, UUIDMixin, TimestampMixin):
     __tablename__ = "reviews"

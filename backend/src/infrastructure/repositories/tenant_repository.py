@@ -6,7 +6,7 @@ from ...domain.models.staff_profile import StaffProfile as DomainStaffProfile
 from ...infrastructure.models import Tenant as ORMTenant
 from ...infrastructure.models import StaffProfile as ORMStaffProfile
 
-class SQLTenantRepository(ITenantRepository):
+class TenantRepository(ITenantRepository):
     def __init__(self, session: Session):
         self.session = session
 

@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import request, jsonify, g
 import jwt
-from config import Config
+from backend.src.config import Config
 
 def auth_required(roles=None):
     def decorator(f):

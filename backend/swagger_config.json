@@ -1,8 +1,0 @@
-{
-    "swagger": "2.0",
-    "info": {
-        "title": "S2O Platform API",
-        "version": "1.0.0",
-        "description": "API Documentation for S2O SaaS Platform"
-    }
-}

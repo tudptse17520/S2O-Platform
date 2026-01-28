@@ -9,7 +9,7 @@ from ..domain.interfaces.itenant_repository import ITenantRepository
 from ..domain.models.user import User, UserRole
 from ..domain.models.tenant import Tenant
 from ..domain.models.staff_profile import StaffProfile
-from config import Config
+from backend.src.config import Config
 
 class AuthService:
     def __init__(self, user_repo: IUserRepository, tenant_repo: ITenantRepository):

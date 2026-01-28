@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify, g
 from pydantic import ValidationError
 from ..schemas.menu_schemas import CreateCategoryRequest, CreateProductRequest, CategoryResponse, ProductResponse
-from src.services.menu_service import MenuService
-from src.infrastructure.postgres import get_db
-from src.infrastructure.repositories import SQLCategoryRepository, SQLProductRepository
+from backend.src.services.menu_service import MenuService
+from backend.src.infrastructure.databases.postgres import get_db
+from backend.src.infrastructure.repositories import CategoryRepository, ProductRepository
 from ..middleware import auth_required
 from ..controllers.utils import standardize_response
 
@@ -43,8 +43,8 @@ def create_category():
     try:
         req = CreateCategoryRequest(**data)
         
-        category_repo = SQLCategoryRepository(db)
-        product_repo = SQLProductRepository(db)
+        category_repo = CategoryRepository(db)
+        product_repo = ProductRepository(db)
         service = MenuService(category_repo, product_repo)
         
         result = service.create_category(g.tenant_id, req.name, req.display_order)
@@ -80,8 +80,8 @@ def get_categories():
     """
     db = next(get_db())
     try:
-        category_repo = SQLCategoryRepository(db)
-        product_repo = SQLProductRepository(db)
+        category_repo = CategoryRepository(db)
+        product_repo = ProductRepository(db)
         service = MenuService(category_repo, product_repo)
         
         results = service.get_categories(g.tenant_id)
@@ -133,8 +133,8 @@ def create_product():
     try:
         req = CreateProductRequest(**data)
         
-        category_repo = SQLCategoryRepository(db)
-        product_repo = SQLProductRepository(db)
+        category_repo = CategoryRepository(db)
+        product_repo = ProductRepository(db)
         service = MenuService(category_repo, product_repo)
         
         # Note: g.tenant_id comes from token
@@ -177,8 +177,8 @@ def get_products():
     category_id = request.args.get('category_id')
     db = next(get_db())
     try:
-        category_repo = SQLCategoryRepository(db)
-        product_repo = SQLProductRepository(db)
+        category_repo = CategoryRepository(db)
+        product_repo = ProductRepository(db)
         service = MenuService(category_repo, product_repo)
         
         results = service.get_products(g.tenant_id, category_id)

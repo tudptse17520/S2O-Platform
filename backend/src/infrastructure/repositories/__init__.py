@@ -1,6 +1,6 @@
-from .user_repository import SQLUserRepository
-from .tenant_repository import SQLTenantRepository
-from .category_repository import SQLCategoryRepository
-from .product_repository import SQLProductRepository
+from .user_repository import UserRepository
+from .tenant_repository import TenantRepository
+from .category_repository import CategoryRepository
+from .product_repository import ProductRepository
 
-__all__ = ["SQLUserRepository", "SQLTenantRepository", "SQLCategoryRepository", "SQLProductRepository"]
+__all__ = ["UserRepository", "TenantRepository", "CategoryRepository", "ProductRepository"]

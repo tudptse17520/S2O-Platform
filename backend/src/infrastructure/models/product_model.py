@@ -2,7 +2,7 @@ import uuid
 from sqlalchemy import String, Float, Boolean, Text, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from pgvector.sqlalchemy import Vector
-from ..base import Base, UUIDMixin, TimestampMixin
+from ..databases.base import Base, UUIDMixin, TimestampMixin
 
 class Product(Base, UUIDMixin, TimestampMixin):
     __tablename__ = "products"

@@ -4,7 +4,7 @@ from ...domain.interfaces.icategory_repository import ICategoryRepository
 from ...domain.models.category import Category as DomainCategory
 from ...infrastructure.models import Category as ORMCategory
 
-class SQLCategoryRepository(ICategoryRepository):
+class CategoryRepository(ICategoryRepository):
     def __init__(self, session: Session):
         self.session = session
 

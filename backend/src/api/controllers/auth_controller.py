@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
 from pydantic import ValidationError
 from ..schemas.auth_schemas import RegisterTenantRequest, LoginRequest
-from src.services.auth_service import AuthService
-from src.infrastructure.postgres import get_db
-from src.infrastructure.repositories import SQLUserRepository, SQLTenantRepository
+from backend.src.services.auth_service import AuthService
+from backend.src.infrastructure.databases.postgres import get_db
+from backend.src.infrastructure.repositories import UserRepository, TenantRepository
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -46,8 +46,8 @@ def register():
         req = RegisterTenantRequest(**data)
         
         # Dependency Injection
-        user_repo = SQLUserRepository(db)
-        tenant_repo = SQLTenantRepository(db)
+        user_repo = UserRepository(db)
+        tenant_repo = TenantRepository(db)
         service = AuthService(user_repo, tenant_repo)
         
         # Execute Use Case
@@ -104,8 +104,8 @@ def login():
         req = LoginRequest(**data)
         
         # Dependency Injection
-        user_repo = SQLUserRepository(db)
-        tenant_repo = SQLTenantRepository(db)
+        user_repo = UserRepository(db)
+        tenant_repo = TenantRepository(db)
         service = AuthService(user_repo, tenant_repo)
         
         # Execute Use Case

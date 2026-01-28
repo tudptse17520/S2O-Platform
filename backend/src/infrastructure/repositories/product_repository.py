@@ -4,7 +4,7 @@ from ...domain.interfaces.iproduct_repository import IProductRepository
 from ...domain.models.product import Product as DomainProduct
 from ...infrastructure.models import Product as ORMProduct
 
-class SQLProductRepository(IProductRepository):
+class ProductRepository(IProductRepository):
     def __init__(self, session: Session):
         self.session = session
 

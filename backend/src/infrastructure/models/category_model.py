@@ -1,7 +1,7 @@
 import uuid
 from sqlalchemy import String, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
-from ..base import Base, UUIDMixin, TimestampMixin
+from ..databases.base import Base, UUIDMixin, TimestampMixin
 
 class Category(Base, UUIDMixin, TimestampMixin):
     __tablename__ = "categories"

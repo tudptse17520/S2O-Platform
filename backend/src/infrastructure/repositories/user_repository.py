@@ -4,7 +4,7 @@ from ...domain.interfaces.iuser_repository import IUserRepository
 from ...domain.models.user import User as DomainUser, UserRole
 from ...infrastructure.models import User as ORMUser
 
-class SQLUserRepository(IUserRepository):
+class UserRepository(IUserRepository):
     def __init__(self, session: Session):
         self.session = session
 

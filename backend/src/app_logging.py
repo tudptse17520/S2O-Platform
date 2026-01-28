@@ -1,22 +1,26 @@
 import logging
-from logging.handlers import RotatingFileHandler
+import logging.config
 import os
 
-
-def setup_logging():
-    log_dir = "logs"
-    os.makedirs(log_dir, exist_ok=True)
-
-    file_handler = RotatingFileHandler(
-        filename=os.path.join(log_dir, "app.log"),
-        maxBytes=5 * 1024 * 1024,  # 5MB
-        backupCount=3
-    )
-
-    console_handler = logging.StreamHandler()
-
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        handlers=[file_handler, console_handler]
-    )
+def setup_logging(app):
+    logging_config = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'standard': {
+                'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            },
+        },
+        'handlers': {
+            'console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+                'formatter': 'standard'
+            },
+        },
+        'root': {
+            'handlers': ['console'],
+            'level': 'DEBUG' if app.debug else 'INFO',
+        }
+    }
+    logging.config.dictConfig(logging_config)
