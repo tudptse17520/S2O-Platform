@@ -14,14 +14,27 @@ class PromotionRepository(IPromotionRepository):
 
     def _to_domain(self, orm_promo: ORMPromotion) -> DomainPromotion:
         """Convert ORM model to domain model"""
+        # Handle both date and datetime objects
+        start_date = orm_promo.start_date
+        if start_date and hasattr(start_date, 'date') and callable(getattr(start_date, 'date')):
+            start_date = start_date.date()
+        elif not start_date:
+            start_date = date.today()
+        
+        end_date = orm_promo.end_date
+        if end_date and hasattr(end_date, 'date') and callable(getattr(end_date, 'date')):
+            end_date = end_date.date()
+        elif not end_date:
+            end_date = date.today()
+        
         return DomainPromotion(
             id=str(orm_promo.id),
             tenant_id=str(orm_promo.tenant_id),
             code=orm_promo.code,
             promotion_type=orm_promo.type,
             value=orm_promo.value,
-            start_date=orm_promo.start_date.date() if orm_promo.start_date else date.today(),
-            end_date=orm_promo.end_date.date() if orm_promo.end_date else date.today()
+            start_date=start_date,
+            end_date=end_date
         )
 
     def _to_orm(self, domain_promo: DomainPromotion) -> ORMPromotion:

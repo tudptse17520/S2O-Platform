@@ -13,10 +13,15 @@ from .controllers.payment_controller import payment_bp
 from .controllers.customer_controller import customer_bp
 from .controllers.staff_controller import staff_bp
 from .controllers.user_controller import user_bp
+from .controllers.category_controller import category_bp
+from .controllers.order_item_controller import order_item_bp
+from .controllers.chatbot_controller import chatbot_bp
+from .controllers.recommendation_controller import recommendation_bp
+from .controllers.qrcode_controller import qrcode_bp
 
 api_bp = Blueprint('api', __name__, url_prefix='/api/v1')
 
-# Register Controllers
+# Register Controllers - Core
 api_bp.register_blueprint(auth_bp)
 api_bp.register_blueprint(menu_bp)
 api_bp.register_blueprint(tenant_bp)
@@ -31,6 +36,15 @@ api_bp.register_blueprint(payment_bp)
 api_bp.register_blueprint(customer_bp)
 api_bp.register_blueprint(staff_bp)
 api_bp.register_blueprint(user_bp)
+api_bp.register_blueprint(category_bp)
+api_bp.register_blueprint(order_item_bp)
+
+# Register Controllers - AI Features
+api_bp.register_blueprint(chatbot_bp)
+api_bp.register_blueprint(recommendation_bp)
+
+# Register Controllers - QR Codes
+api_bp.register_blueprint(qrcode_bp)
 
 
 @api_bp.route('/health', methods=['GET'])
@@ -40,4 +54,3 @@ def health_check():
 @api_bp.route('/', methods=['GET'])
 def api_index():
     return jsonify({"message": "Welcome to S2O API v1"}), 200
-
