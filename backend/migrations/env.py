@@ -11,7 +11,7 @@ from alembic import context
 sys.path.append(os.path.join(os.path.dirname(__file__), '../src'))
 
 # Import Base and models so they are registered
-from infrastructure.base import Base
+from infrastructure.databases.base import Base
 import infrastructure.models  # noqa
 
 # this is the Alembic Config object, which provides

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from domain.models.review import Review
+from ..models.review import Review
 
 
 class IReviewRepository(ABC):

@@ -1,4 +1,5 @@
 from typing import Optional
+import uuid as uuid_lib
 from sqlalchemy.orm import Session
 from ...domain.interfaces.itenant_repository import ITenantRepository
 from ...domain.models.tenant import Tenant as DomainTenant
@@ -39,7 +40,8 @@ class TenantRepository(ITenantRepository):
         return profile
     
     def get_staff_profile_by_user_id(self, user_id: str) -> Optional[DomainStaffProfile]:
-        orm_profile = self.session.query(ORMStaffProfile).filter_by(user_id=user_id).first()
+        uid = uuid_lib.UUID(user_id) if isinstance(user_id, str) else user_id
+        orm_profile = self.session.query(ORMStaffProfile).filter_by(user_id=uid).first()
         if orm_profile:
             return DomainStaffProfile(
                 id=orm_profile.id,
@@ -51,3 +53,4 @@ class TenantRepository(ITenantRepository):
                 updated_at=orm_profile.updated_at
             )
         return None
+

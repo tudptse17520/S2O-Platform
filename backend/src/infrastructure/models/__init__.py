@@ -11,7 +11,7 @@ from .order_item_model import OrderItem, OrderItemStatus
 from .invoice_model import Invoice, PaymentMethod, PaymentStatus
 from .reservation_model import Reservation, ReservationStatus
 from .review_model import Review
-
+from .promotion_model import Promotion, PromotionProduct
 __all__ = [
     "User", "UserRole",
     "Tenant",
@@ -25,5 +25,6 @@ __all__ = [
     "OrderItem", "OrderItemStatus",
     "Invoice", "PaymentMethod", "PaymentStatus",
     "Reservation", "ReservationStatus",
-    "Review"
+    "Review",
+    "Promotion", "PromotionProduct"
 ]

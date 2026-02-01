@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from domain.models.invoice import Invoice
+from ..models.invoice import Invoice
 
 
 class IInvoiceRepository(ABC):

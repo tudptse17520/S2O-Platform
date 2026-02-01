@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from domain.models.reservation import Reservation
+from ..models.reservation import Reservation
 
 
 class IReservationRepository(ABC):

@@ -9,7 +9,7 @@ from ..domain.interfaces.itenant_repository import ITenantRepository
 from ..domain.models.user import User, UserRole
 from ..domain.models.tenant import Tenant
 from ..domain.models.staff_profile import StaffProfile
-from backend.src.config import Config
+from ..config import Config
 
 class AuthService:
     def __init__(self, user_repo: IUserRepository, tenant_repo: ITenantRepository):
@@ -99,7 +99,7 @@ class AuthService:
             raise ValueError("Invalid email or password")
         
         # Find tenant for this user
-        staff_profile = self.tenant_repo.get_staff_profile_by_user_id(user.id)
+        staff_profile = self.tenant_repo.get_staff_profile_by_user_id(str(user.id))
         tenant_id = None
         if staff_profile:
             tenant_id = str(staff_profile.tenant_id)

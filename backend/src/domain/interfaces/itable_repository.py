@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from domain.models.table import Table
+from ..models.table import Table
 
 
 class ITableRepository(ABC):

@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
 from pydantic import ValidationError
-from ..schemas.auth_schemas import RegisterTenantRequest, LoginRequest
-from backend.src.services.auth_service import AuthService
-from backend.src.infrastructure.databases.postgres import get_db
-from backend.src.infrastructure.repositories import UserRepository, TenantRepository
+from ..schemas.auth_schema import RegisterTenantRequest, LoginRequest
+from ...services.auth_service import AuthService
+from ...infrastructure.databases.postgres import get_db
+from ...infrastructure.repositories import UserRepository, TenantRepository
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 

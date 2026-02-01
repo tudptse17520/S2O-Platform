@@ -1,4 +1,4 @@
-(from typing import Optional)
+from typing import Optional
 from datetime import datetime
 from enum import Enum
 
@@ -50,4 +50,3 @@ class Reservation:
 
 	def __repr__(self) -> str:
 		return f"<Reservation id={self.id} booking_time={self.booking_time} party_size={self.party_size} status={self.status}>"
-

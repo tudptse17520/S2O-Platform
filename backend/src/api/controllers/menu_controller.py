@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify, g
 from pydantic import ValidationError
-from ..schemas.menu_schemas import CreateCategoryRequest, CreateProductRequest, CategoryResponse, ProductResponse
-from backend.src.services.menu_service import MenuService
-from backend.src.infrastructure.databases.postgres import get_db
-from backend.src.infrastructure.repositories import CategoryRepository, ProductRepository
+from ..schemas.menu_schema import CreateCategoryRequest, CreateProductRequest, CategoryResponse, ProductResponse
+from ...services.menu_service import MenuService
+from ...infrastructure.databases.postgres import get_db
+from ...infrastructure.repositories import CategoryRepository, ProductRepository
 from ..middleware import auth_required
 from ..controllers.utils import standardize_response
 

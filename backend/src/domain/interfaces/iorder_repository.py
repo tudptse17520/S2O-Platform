@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from domain.models.order import Order
+from ..models.order import Order
 
 
 class IOrderRepository(ABC):

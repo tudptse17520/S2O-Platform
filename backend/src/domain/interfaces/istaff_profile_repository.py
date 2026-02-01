@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from domain.models.staff_profile import StaffProfile
+from ..models.staff_profile import StaffProfile
 
 
 class IStaffProfileRepository(ABC):

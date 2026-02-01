@@ -1,4 +1,4 @@
-(from typing import Optional, List)
+from typing import Optional, List
 from datetime import datetime
 from enum import Enum
 
@@ -57,4 +57,3 @@ class Order:
 
 	def __repr__(self) -> str:
 		return f"<Order id={self.id} status={self.status} total={self.total_amount}>"
-

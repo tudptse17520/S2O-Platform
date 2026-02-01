@@ -1,4 +1,4 @@
-(from typing import Optional)
+from typing import Optional
 from enum import Enum
 from datetime import datetime
 
@@ -47,4 +47,3 @@ class Table:
 
 	def __repr__(self) -> str:
 		return f"<Table id={self.id} name={self.name} status={self.status}>"
-

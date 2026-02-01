@@ -1,82 +1,292 @@
-from flask import Blueprint, request, jsonify
-from api.responses import success_response, error_response
+from flask import Blueprint, request, jsonify, g
+from pydantic import ValidationError
+from ..schemas.payment_schema import ProcessPaymentRequest
+from ..middleware import auth_required
+from ...services.payment_service import PaymentService
+from ...infrastructure.databases.postgres import get_db
+from ...infrastructure.repositories.payment_repository import PaymentRepository
 import logging
 
 logger = logging.getLogger(__name__)
 
-payment_bp = Blueprint("payment", __name__)
+payment_bp = Blueprint("payments", __name__, url_prefix="/payments")
 
 
 @payment_bp.route("", methods=["GET"])
+@auth_required()
 def get_payments():
     """
-    Get all payments
+    Get all payments for current tenant
+    ---
+    tags:
+      - Payments
+    parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+    responses:
+      200:
+        description: List of payments
     """
+    db = next(get_db())
     try:
-        # TODO: Implement get payments logic
-        return success_response({"payments": []})
+        payment_repo = PaymentRepository(db)
+        service = PaymentService(payment_repo)
+        
+        payments = service.get_payments_by_tenant(g.tenant_id)
+        return jsonify({"payments": payments}), 200
     except Exception as e:
         logger.error(f"Get payments error: {e}")
-        return error_response(str(e), 500)
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db.close()
 
 
 @payment_bp.route("/<payment_id>", methods=["GET"])
+@auth_required()
 def get_payment(payment_id):
     """
     Get payment by ID
+    ---
+    tags:
+      - Payments
+    parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: path
+        name: payment_id
+        type: string
+        required: true
+    responses:
+      200:
+        description: Payment details
+      404:
+        description: Payment not found
     """
+    db = next(get_db())
     try:
-        # TODO: Implement get payment logic
-        return success_response({"payment_id": payment_id})
+        payment_repo = PaymentRepository(db)
+        service = PaymentService(payment_repo)
+        
+        payment = service.get_payment(payment_id)
+        if not payment:
+            return jsonify({"error": "Payment not found"}), 404
+        return jsonify(payment), 200
     except Exception as e:
         logger.error(f"Get payment error: {e}")
-        return error_response(str(e), 500)
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db.close()
+
+
+@payment_bp.route("/order/<order_id>", methods=["GET"])
+@auth_required()
+def get_payments_by_order(order_id):
+    """
+    Get payments for an order
+    ---
+    tags:
+      - Payments
+    parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: path
+        name: order_id
+        type: string
+        required: true
+    responses:
+      200:
+        description: List of payments for order
+    """
+    db = next(get_db())
+    try:
+        payment_repo = PaymentRepository(db)
+        service = PaymentService(payment_repo)
+        
+        payments = service.get_payments_by_order(order_id)
+        return jsonify({"payments": payments}), 200
+    except Exception as e:
+        logger.error(f"Get payments by order error: {e}")
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db.close()
 
 
 @payment_bp.route("", methods=["POST"])
+@auth_required()
 def create_payment():
     """
     Create new payment
+    ---
+    tags:
+      - Payments
+    parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: body
+        name: body
+        schema:
+          id: ProcessPaymentRequest
+          required:
+            - amount
+          properties:
+            order_id:
+              type: string
+            invoice_id:
+              type: string
+            amount:
+              type: number
+            method:
+              type: string
+              description: CASH, CARD, VIETQR, BANK_TRANSFER
+    responses:
+      201:
+        description: Payment created
     """
+    data = request.get_json()
+    db = next(get_db())
     try:
-        data = request.get_json()
+        req = ProcessPaymentRequest(**data)
         
-        if not data:
-            return error_response("Request body is required", 400)
+        payment_repo = PaymentRepository(db)
+        service = PaymentService(payment_repo)
         
-        # TODO: Implement create payment logic
-        return success_response({"message": "Payment created", "data": data}, 201)
+        result = service.create_payment(g.tenant_id, req.model_dump())
+        db.commit()
+        
+        return jsonify(result), 201
+    except ValidationError as e:
+        db.rollback()
+        return jsonify({"error": "Validation Error", "details": e.errors()}), 400
     except Exception as e:
+        db.rollback()
         logger.error(f"Create payment error: {e}")
-        return error_response(str(e), 500)
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db.close()
 
 
-@payment_bp.route("/<payment_id>", methods=["PUT"])
-def update_payment(payment_id):
+@payment_bp.route("/<payment_id>/process", methods=["POST"])
+@auth_required(roles=['OWNER', 'STAFF', 'SYS_ADMIN'])
+def process_payment(payment_id):
     """
-    Update payment
+    Process payment (mark as success)
+    ---
+    tags:
+      - Payments
+    parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: path
+        name: payment_id
+        type: string
+        required: true
+    responses:
+      200:
+        description: Payment processed successfully
     """
+    db = next(get_db())
     try:
-        data = request.get_json()
+        payment_repo = PaymentRepository(db)
+        service = PaymentService(payment_repo)
         
-        if not data:
-            return error_response("Request body is required", 400)
+        result = service.process_payment(payment_id)
+        db.commit()
         
-        # TODO: Implement update payment logic
-        return success_response({"message": "Payment updated", "payment_id": payment_id})
+        return jsonify(result), 200
+    except ValueError as e:
+        db.rollback()
+        return jsonify({"error": str(e)}), 404
     except Exception as e:
-        logger.error(f"Update payment error: {e}")
-        return error_response(str(e), 500)
+        db.rollback()
+        logger.error(f"Process payment error: {e}")
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db.close()
 
 
-@payment_bp.route("/<payment_id>", methods=["DELETE"])
-def delete_payment(payment_id):
+@payment_bp.route("/<payment_id>/qr", methods=["GET"])
+@auth_required()
+def generate_qr_code(payment_id):
     """
-    Delete payment
+    Generate VietQR code for payment
+    ---
+    tags:
+      - Payments
+    parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: path
+        name: payment_id
+        type: string
+        required: true
+    responses:
+      200:
+        description: QR code information
     """
+    db = next(get_db())
     try:
-        # TODO: Implement delete payment logic
-        return success_response({"message": "Payment deleted", "payment_id": payment_id})
+        payment_repo = PaymentRepository(db)
+        service = PaymentService(payment_repo)
+        
+        result = service.generate_qr_code(payment_id, g.tenant_id)
+        return jsonify(result), 200
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 404
     except Exception as e:
-        logger.error(f"Delete payment error: {e}")
-        return error_response(str(e), 500)
+        logger.error(f"Generate QR error: {e}")
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db.close()
+
+
+@payment_bp.route("/<payment_id>/refund", methods=["POST"])
+@auth_required(roles=['OWNER', 'SYS_ADMIN'])
+def refund_payment(payment_id):
+    """
+    Refund a payment
+    ---
+    tags:
+      - Payments
+    parameters:
+      - in: header
+        name: Authorization
+        type: string
+        required: true
+      - in: path
+        name: payment_id
+        type: string
+        required: true
+    responses:
+      200:
+        description: Payment refunded
+    """
+    db = next(get_db())
+    try:
+        payment_repo = PaymentRepository(db)
+        service = PaymentService(payment_repo)
+        
+        result = service.refund_payment(payment_id)
+        db.commit()
+        
+        return jsonify(result), 200
+    except ValueError as e:
+        db.rollback()
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Refund payment error: {e}")
+        return jsonify({"error": str(e)}), 500
+    finally:
+        db.close()

@@ -4,11 +4,13 @@ from sqlalchemy import String, Enum
 from sqlalchemy.orm import Mapped, mapped_column
 from ..databases.base import Base, UUIDMixin, TimestampMixin
 
+
 class UserRole(PyEnum):
     SYS_ADMIN = "SYS_ADMIN"
     OWNER = "OWNER"
     STAFF = "STAFF"
     CUSTOMER = "CUSTOMER"
+
 
 class User(Base, UUIDMixin, TimestampMixin):
     __tablename__ = "users"
