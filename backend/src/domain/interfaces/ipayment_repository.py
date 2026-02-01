@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from domain.models.payment import Payment
+from ..models.payment import Payment
 
 
 class IPaymentRepository(ABC):

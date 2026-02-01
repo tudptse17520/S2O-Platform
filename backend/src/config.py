@@ -1,48 +1,19 @@
 import os
-from dotenv import load_dotenv
 
-load_dotenv()
+class Config:
+    SECRET_KEY = os.getenv('SECRET_KEY', 'dev_secret_key')
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI', 'postgresql+psycopg2://postgres:1234@localhost:5433/s2o_db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    DEBUG = os.getenv('FLASK_DEBUG', '1') == '1'
 
-
-class BaseConfig:
-    APP_NAME = "S2O Backend"
-    DEBUG = False
-    TESTING = False
-
-    SECRET_KEY = os.getenv("SECRET_KEY")
-
-    # ======================
-    # DATABASE CONFIG
-    # ======================
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        "DATABASE_URL",
-        "postgresql://postgres:postgres@localhost:5432/s2o_db"
-    )
-
-    SQL_ECHO = False
-
-    # ======================
-    # SWAGGER CONFIG
-    # ======================
-    SWAGGER = {
-        "title": "S2O API",
-        "uiversion": 3
-    }
-
-
-class DevelopmentConfig(BaseConfig):
+class DevelopmentConfig(Config):
     DEBUG = True
-    SQL_ECHO = True   # 👉 dev thì bật log SQL
 
-
-class ProductionConfig(BaseConfig):
+class ProductionConfig(Config):
     DEBUG = False
-    SQL_ECHO = False
 
-
-def get_config():
-    env = os.getenv("FLASK_ENV", "development")
-
-    if env == "production":
-        return ProductionConfig
-    return DevelopmentConfig
+config = {
+    'development': DevelopmentConfig,
+    'production': ProductionConfig,
+    'default': DevelopmentConfig
+}

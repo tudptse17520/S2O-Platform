@@ -1,4 +1,4 @@
-(from typing import Optional)
+from typing import Optional
 from datetime import datetime
 
 
@@ -31,4 +31,3 @@ class Review:
 
 	def __repr__(self) -> str:
 		return f"<Review id={self.id} user_id={self.user_id} rating={self.rating}>"
-

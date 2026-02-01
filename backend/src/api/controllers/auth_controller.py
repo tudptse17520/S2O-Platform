@@ -1,62 +1,124 @@
 from flask import Blueprint, request, jsonify
-from api.responses import success_response, error_response
-import logging
+from pydantic import ValidationError
+from ..schemas.auth_schema import RegisterTenantRequest, LoginRequest
+from ...services.auth_service import AuthService
+from ...infrastructure.databases.postgres import get_db
+from ...infrastructure.repositories import UserRepository, TenantRepository
 
-logger = logging.getLogger(__name__)
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-auth_bp = Blueprint("auth", __name__)
-
-
-@auth_bp.route("/login", methods=["POST"])
-def login():
-    """
-    User login endpoint
-    """
-    try:
-        data = request.get_json()
-        
-        if not data:
-            return error_response("Request body is required", 400)
-        
-        # TODO: Implement login logic
-        return success_response({
-            "message": "Login endpoint",
-            "data": data
-        })
-    except Exception as e:
-        logger.error(f"Login error: {e}")
-        return error_response(str(e), 500)
-
-
-@auth_bp.route("/register", methods=["POST"])
+@auth_bp.route('/register', methods=['POST'])
 def register():
     """
-    User registration endpoint
+    Register a new tenant and owner
+    ---
+    tags:
+      - Auth
+    parameters:
+      - in: body
+        name: body
+        schema:
+          id: RegisterTenantRequest
+          required:
+            - tenant_name
+            - full_name
+            - email
+            - password
+          properties:
+            tenant_name:
+              type: string
+            full_name:
+              type: string
+            email:
+              type: string
+            password:
+              type: string
+    responses:
+      201:
+        description: Tenant registered successfully
+      400:
+        description: Validation error
     """
+    data = request.get_json()
+    db = next(get_db())
     try:
-        data = request.get_json()
+        # Validate
+        req = RegisterTenantRequest(**data)
         
-        if not data:
-            return error_response("Request body is required", 400)
+        # Dependency Injection
+        user_repo = UserRepository(db)
+        tenant_repo = TenantRepository(db)
+        service = AuthService(user_repo, tenant_repo)
         
-        # TODO: Implement registration logic
-        return success_response({
-            "message": "Register endpoint",
-            "data": data
-        })
+        # Execute Use Case
+        result = service.register_tenant(req.model_dump())
+        
+        # Commit Transaction (Unit of Work)
+        db.commit()
+        
+        return jsonify(result), 201
+    except ValidationError as e:
+        db.rollback()
+        return jsonify({"error": "Validation Error", "details": e.errors()}), 400
+    except ValueError as e:
+        db.rollback()
+        return jsonify({"error": str(e)}), 400
     except Exception as e:
-        logger.error(f"Register error: {e}")
-        return error_response(str(e), 500)
+        db.rollback()
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": "Internal Server Error"}), 500
+    finally:
+        db.close()
 
-
-@auth_bp.route("/logout", methods=["POST"])
-def logout():
+@auth_bp.route('/login', methods=['POST'])
+def login():
     """
-    User logout endpoint
+    Login and get JWT token
+    ---
+    tags:
+      - Auth
+    parameters:
+      - in: body
+        name: body
+        schema:
+          id: LoginRequest
+          required:
+            - email
+            - password
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+    responses:
+      200:
+        description: Login successful
+      401:
+        description: Invalid credentials
     """
+    data = request.get_json()
+    db = next(get_db())
     try:
-        # TODO: Implement logout logic
-        return success_response({"message": "Logout successful"})
+        # Validate
+        req = LoginRequest(**data)
+        
+        # Dependency Injection
+        user_repo = UserRepository(db)
+        tenant_repo = TenantRepository(db)
+        service = AuthService(user_repo, tenant_repo)
+        
+        # Execute Use Case
+        result = service.login(req.model_dump())
+        
+        return jsonify(result), 200
+    except ValidationError as e:
+        return jsonify({"error": "Validation Error", "details": e.errors()}), 400
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 401
     except Exception as e:
-        logger.error(f"Logout error: {e}")
-        return error_response(str(e), 500)
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": "Internal Server Error"}), 500
+    finally:
+        db.close()

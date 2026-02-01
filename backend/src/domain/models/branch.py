@@ -1,4 +1,4 @@
-(from typing import Optional)
+from typing import Optional
 from datetime import datetime
 
 
@@ -39,4 +39,3 @@ class Branch:
 
 	def __repr__(self) -> str:
 		return f"<Branch id={self.id} name={self.name} tenant_id={self.tenant_id}>"
-

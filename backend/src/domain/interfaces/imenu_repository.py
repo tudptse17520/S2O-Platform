@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from domain.models.product import Product
+from ..models.product import Product
 
 
 class IMenuRepository(ABC):

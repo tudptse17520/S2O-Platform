@@ -1,41 +1,17 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
-from domain.models.tenant import Tenant
-
+from typing import Optional
+from ..models.tenant import Tenant
+from ..models.staff_profile import StaffProfile
 
 class ITenantRepository(ABC):
-	"""
-	Interface for Tenant Repository
-	Defines contract for tenant data access operations.
-	"""
+    @abstractmethod
+    def save(self, tenant: Tenant) -> Tenant:
+        pass
 
-	@abstractmethod
-	def create(self, tenant: Tenant) -> Tenant:
-		"""Create a new tenant"""
-		pass
-
-	@abstractmethod
-	def get_by_id(self, tenant_id: str) -> Optional[Tenant]:
-		"""Get tenant by ID"""
-		pass
-
-	@abstractmethod
-	def get_all(self) -> List[Tenant]:
-		"""Get all tenants"""
-		pass
-
-	@abstractmethod
-	def get_by_domain(self, domain: str) -> Optional[Tenant]:
-		"""Get tenant by domain or unique key"""
-		pass
-
-	@abstractmethod
-	def update(self, tenant_id: str, tenant: Tenant) -> Tenant:
-		"""Update tenant"""
-		pass
-
-	@abstractmethod
-	def delete(self, tenant_id: str) -> bool:
-		"""Delete tenant"""
-		pass
-
+    @abstractmethod
+    def save_staff_profile(self, profile: StaffProfile) -> StaffProfile:
+        pass
+    
+    @abstractmethod
+    def get_staff_profile_by_user_id(self, user_id: str) -> Optional[StaffProfile]:
+        pass

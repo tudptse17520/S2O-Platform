@@ -1,4 +1,4 @@
-(from typing import Optional)
+from typing import Optional
 from datetime import datetime
 from enum import Enum
 
@@ -62,4 +62,3 @@ class Payment:
 
 	def __repr__(self) -> str:
 		return f"<Payment id={self.id} amount={self.amount} status={self.status}>"
-

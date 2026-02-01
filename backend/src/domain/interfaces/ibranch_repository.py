@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from domain.models.branch import Branch
+from ..models.branch import Branch
 
 
 class IBranchRepository(ABC):

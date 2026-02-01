@@ -1,23 +1,14 @@
-from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, DateTime
-from sqlalchemy.sql import func
+import uuid
+from datetime import datetime
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import DateTime
 
-# Base class for all ORM models
-Base = declarative_base()
-
+class Base(DeclarativeBase):
+    pass
 
 class TimestampMixin:
-    """Mixin that adds created_at and updated_at timestamps"""
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
 
-    created_at = Column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        nullable=False
-    )
-
-    updated_at = Column(
-        DateTime(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-        nullable=False
-    )
+class UUIDMixin:
+    id: Mapped[uuid.UUID] = mapped_column(primary_key=True, default=uuid.uuid4)
