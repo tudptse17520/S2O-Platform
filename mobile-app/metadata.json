@@ -1,5 +1,0 @@
-{
-  "name": "ANH HAI's Restaurant",
-  "description": "A premium mobile app for discovering restaurants, booking tables, managing reviews, and tracking dining history with AI assistance.",
-  "requestFramePermissions": ["camera", "microphone", "geolocation"]
-}
