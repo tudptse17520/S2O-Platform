@@ -1,0 +1,4 @@
+{
+  "name": "GuestDine - QR Ordering",
+  "description": "A mobile-optimized guest ordering interface for restaurants. Features QR context parsing, real-time order tracking, and AI-powered dish recommendations using Gemini 2.5."
+}

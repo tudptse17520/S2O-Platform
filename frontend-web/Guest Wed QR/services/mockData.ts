@@ -1,0 +1,72 @@
+import { MenuItem } from "../types";
+
+export const MOCK_MENU: MenuItem[] = [
+  {
+    id: "1",
+    name: "Phở Anh Hai",
+    description: "Nước dùng ninh xương 24h, tái, nạm, gầu, bò viên.",
+    price: 85000,
+    category: "Món Nước",
+    image: "/pho_anh_hai.jpg",
+    spicyLevel: 0,
+    isPopular: true,
+  },
+  {
+    id: "2",
+    name: "Gà Chiên Mắm Tỏi",
+    description: "Hương vị cố đô, chả cua, giò heo, cay nồng.",
+    price: 90000,
+    category: "Món Khô",
+    image: "/ga_chien.jpg",
+    spicyLevel: 2,
+  },
+  {
+    id: "3",
+    name: "Lẩu Thái Hải Sản",
+    description: "Gạo tấm thơm, sườn nướng than hoa đậm vị.",
+    price: 75000,
+    category: "Món Nước",
+    image: "lau_thai.jpg",
+    spicyLevel: 0,
+    isPopular: true,
+  },
+  {
+    id: "4",
+    name: "Nộm sứa biển",
+    description: "Tôm tươi, thịt ba rọi, rau sống, chấm tương đậu.",
+    price: 45000,
+    category: "Khai Vị",
+    image: "/nom_sua.jpg",
+    spicyLevel: 0,
+  },
+  {
+    id: "5",
+    name: "Cơm Chiên Dương Châu",
+    description: "Giòn rụm, nhân hải sản tươi ngon.",
+    price: 65000,
+    category: "Cơm",
+    image: "/com_chien.jpg",
+    spicyLevel: 0,
+  },
+  {
+    id: "6",
+    name: "Bia",
+    description: "Thanh mát, giải nhiệt ngày hè.",
+    price: 45000,
+    category: "Đồ Uống",
+    image: "/bia.jpg",
+    spicyLevel: 0,
+  },
+  {
+    id: "7",
+    name: "Cà Phê Sữa Đá",
+    description: "Đậm đà hương vị Việt Nam.",
+    price: 35000,
+    category: "Đồ Uống",
+    image: "/ca_phe_sua_da.jpg",
+    spicyLevel: 0,
+    isPopular: true,
+  },
+];
+
+export const CATEGORIES = ["Tất cả", "Món Nước", "Cơm", "Khai Vị", "Đồ Uống"];

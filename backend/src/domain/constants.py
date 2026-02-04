@@ -1,0 +1,4 @@
+# Domain Constants
+
+DEFAULT_PAGE_SIZE = 20
+MAX_ITEMS_PER_ORDER = 100
