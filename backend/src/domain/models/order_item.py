@@ -59,7 +59,7 @@ class OrderItem:
     
     def is_valid(self) -> bool:
         """Validate order item data"""
-        return (
+        return bool(
             self.quantity > 0 
             and self.price_at_order > 0 
             and self.order_id 

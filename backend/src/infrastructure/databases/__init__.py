@@ -1,9 +1,8 @@
 from .database_postgres import PostgresDatabase
-from .redis_client import RedisClient
 
 
 def init_db(app):
-	"""Initialize database and related clients for the Flask app."""
+	"""Initialize database for the Flask app."""
 	# Initialize Postgres (SQLAlchemy engine & session)
 	PostgresDatabase.init_app(app)
 
@@ -14,15 +13,10 @@ def init_db(app):
 	except Exception as e:
 		app.logger.warning(f"Could not auto-create tables: {e}")
 
-	# Initialize Redis client (optional)
-	try:
-		RedisClient.init_app(app)
-		app.logger.info("Redis client initialized")
-	except Exception as e:
-		app.logger.warning(f"Redis initialization skipped or failed: {e}")
+	# Note: Redis/Cache is initialized separately via cache_service
+	# See infrastructure/services/cache_service.py
 
 
 def get_session():
 	"""Get a DB session from the configured database backend."""
 	return PostgresDatabase.get_session()
-

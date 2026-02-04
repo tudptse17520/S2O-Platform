@@ -36,3 +36,15 @@ httpx>=0.25.0
 
 # HTTP requests (for testing)
 requests>=2.31.0
+
+# WebSocket/Real-time
+Flask-SocketIO>=5.3.0
+python-socketio>=5.10.0
+eventlet>=0.35.0
+
+# Caching (Redis)
+Flask-Caching>=2.1.0
+redis>=5.0.0
+
+# Production server
+gunicorn>=21.0.0
