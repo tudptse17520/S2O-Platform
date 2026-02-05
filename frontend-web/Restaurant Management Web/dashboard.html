@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
   <head>
     <script>
-      // token sẽ được render bởi Flask: window.APP_TOKEN
-      window.APP_TOKEN = "{{ app_token }}";
+      // Token giả lập để JS không bị lỗi
+      window.APP_TOKEN = "123456";
     </script>
 
     <meta charset="UTF-8" />
@@ -13,10 +13,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <aside class="sidebar">
@@ -25,18 +22,16 @@
         onclick="switchView('dashboard')"
         style="cursor: pointer"
       >
-        <img
-          src="{{ url_for('static', filename='image_1211.jpg') }}"
-          alt="IT Logo"
-          class="logo-img"
-        />
+        <img src="image_1211.jpg" alt="IT Logo" class="logo-img" />
         <div class="brand-text">ANH HAI'S<br />RESTAURANT</div>
       </div>
       <div class="user-info">
         <div class="user-avatar">C</div>
         <div style="display: flex; flex-direction: column">
           <span style="font-weight: bold; font-size: 0.95rem">Quản lý</span>
-          <span style="font-size: 0.8rem; color: #94a3b8">Administrator</span>
+          <span style="font-size: 0.8rem; color: #94a3b8"
+            >Restaurant Management</span
+          >
         </div>
       </div>
       <ul class="menu-list">
@@ -59,25 +54,19 @@
         <li id="nav-staff" class="menu-item" onclick="switchView('staff')">
           <i class="fas fa-user-tie"></i> <span>Quản lý nhân viên</span>
         </li>
-      </ul>
-      <li
-        class="menu-item"
-        style="margin-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1)"
-      >
-        <a
-          href="/logout"
+        <li
+          class="menu-item"
+          onclick="handleLogout()"
           style="
-            text-decoration: none;
-            color: inherit;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            width: 100%;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
           "
         >
-          <i class="fas fa-sign-out-alt"></i> <span>Đăng xuất</span>
-        </a>
-      </li>
+          <i class="fas fa-sign-out-alt" style="color: #ef4444"></i>
+          <span style="color: #ef4444; font-weight: bold">Đăng xuất</span>
+        </li>
+      </ul>
     </aside>
 
     <main class="main-content">
@@ -88,7 +77,10 @@
         <div class="top-actions">
           <a
             href="#"
-            onclick="toggleChatbot(); return false;"
+            onclick="
+              toggleChatbot();
+              return false;
+            "
             class="action-link"
           >
             <span>🤖</span> Trợ lý AI
@@ -863,16 +855,16 @@
               </div>
             </div>
             <div class="form-group">
-              <label>Link ảnh (Avatar):</label>
-              <input
+              <label>Link ảnh:</label
+              ><input
                 type="text"
                 id="staff-img-input"
                 class="edit-input"
-                placeholder="https://..."
-                onchange="document.getElementById('staff-preview-img').src = this.value"
+                onchange="
+                  document.getElementById('staff-preview-img').src = this.value
+                "
               />
             </div>
-
             <button
               onclick="saveStaff()"
               class="action-btn"
@@ -895,7 +887,7 @@
       <div id="chart-tooltip" class="chart-tooltip"></div>
     </main>
 
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="script.js"></script>
     <div id="chatbot-widget" class="chat-widget">
       <div class="chat-header" onclick="toggleChatbot()">
         <div style="display: flex; align-items: center; gap: 10px">

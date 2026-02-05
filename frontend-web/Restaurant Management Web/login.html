@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
@@ -8,84 +8,65 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='login_style.css') }}"
-    />
+    <link rel="stylesheet" href="login_style.css" />
   </head>
   <body>
     <div class="brand-logo-container">
-      <img
-        src="{{ url_for('static', filename='image_1211.jpg') }}"
-        alt="Logo"
-        class="brand-logo"
-      />
+      <img src="image_1211.jpg" alt="Logo" class="brand-logo" />
       <div class="brand-name">ANH HAI'S RESTAURANT</div>
     </div>
 
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %}
-    <div class="flash-container">
-      {% for category, message in messages %}
-      <div class="alert {{ category }}">{{ message }}</div>
-      {% endfor %}
-    </div>
-    {% endif %} {% endwith %}
-
     <div class="container" id="container">
       <div class="form-container sign-up-container">
-        <form action="/login" method="POST">
+        <form action="#">
           <h1>Tạo tài khoản</h1>
           <div class="social-container">
             <a
-              href="https://www.facebook.com/"
-              target="_blank"
+              href="https://facebook.com"
               class="social"
               title="Đến trang Facebook"
             >
               <i class="fab fa-facebook-f"></i>
             </a>
             <a
-              href="https://accounts.google.com/signin"
-              target="_blank"
+              href="https://google.com"
               class="social"
               title="Đến trang Google"
             >
               <i class="fab fa-google"></i>
             </a>
           </div>
-          <span>hoặc sử dụng email để đăng ký</span>
-          <input
-            type="text"
-            name="username"
-            placeholder="Tên đăng nhập"
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Mật khẩu"
-            required
-          />
-          <button type="submit" name="action" value="register">Đăng Ký</button>
+          <span>hoặc đăng ký bằng email</span>
+          <input type="text" name="username" placeholder="Tên đăng nhập" />
+          <input type="email" name="email" placeholder="Email" />
+          <input type="password" name="password" placeholder="Mật khẩu" />
+          <button
+            type="button"
+            onclick="alert('Chức năng đăng ký cần Backend để hoạt động!')"
+          >
+            Đăng Ký
+          </button>
         </form>
       </div>
 
       <div class="form-container sign-in-container">
-        <form action="/login" method="POST">
+        <form
+          onsubmit="
+            event.preventDefault();
+            window.location.href = 'dashboard.html';
+          "
+        >
           <h1>Đăng Nhập</h1>
           <div class="social-container">
             <a
-              href="https://www.facebook.com/"
-              target="_blank"
+              href="https://facebook.com"
               class="social"
               title="Đến trang Facebook"
             >
               <i class="fab fa-facebook-f"></i>
             </a>
             <a
-              href="https://accounts.google.com/signin"
-              target="_blank"
+              href="https://google.com"
               class="social"
               title="Đến trang Google"
             >
@@ -106,7 +87,7 @@
             required
           />
           <a href="#">Quên mật khẩu?</a>
-          <button type="submit" name="action" value="login">Đăng Nhập</button>
+          <button type="submit">Đăng Nhập</button>
         </form>
       </div>
 
@@ -132,6 +113,6 @@
       </div>
     </div>
 
-    <script src="{{ url_for('static', filename='login_script.js') }}"></script>
+    <script src="login_script.js"></script>
   </body>
 </html>

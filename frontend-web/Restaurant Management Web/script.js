@@ -301,23 +301,23 @@ function drawDonutChart(containerId, data, centerText) {
     svgHtml += `
         <g class="chart-group">
             <path d="${pathData}" fill="${
-      item.color
-    }" class="chart-segment"></path>
+              item.color
+            }" class="chart-segment"></path>
             
             <polyline points="${lx1},${ly1} ${lx2},${ly2} ${lx3},${ly3}" class="chart-line" />
             
             <circle cx="${lx3}" cy="${ly3}" r="2" class="chart-point" />
 
             <rect x="${lx3 - 40}" y="${
-      ly3 - 20
-    }" width="80" height="35" rx="4" class="chart-text-bg" />
+              ly3 - 20
+            }" width="80" height="35" rx="4" class="chart-text-bg" />
 
             <text x="${lx3}" y="${ly3 - 5}" class="chart-text">${
-      item.label
-    }</text>
+              item.label
+            }</text>
             <text x="${lx3}" y="${ly3 + 10}" class="chart-sub-text">${
-      item.info
-    }</text>
+              item.info
+            }</text>
         </g>`;
 
     currentAngle += sliceAngle;
@@ -399,7 +399,7 @@ function renderMenu() {
     } else {
       // Giá gốc bình thường
       priceDisplay = `<div class="price-tag">${dish.price.toLocaleString(
-        "vi-VN"
+        "vi-VN",
       )}đ</div>`;
     }
 
@@ -439,15 +439,12 @@ function openAddModal() {
   document.getElementById("edit-img-input").value = "";
   document.getElementById("edit-img-file").value = "";
 
-  document.getElementById(
-    "modal-title-container"
-  ).innerHTML = `<input type="text" id="edit-title-input" class="edit-input" placeholder="Tên món..." style="font-size: 1.5rem;">`;
-  document.getElementById(
-    "modal-price-container"
-  ).innerHTML = `<input type="text" id="edit-price-input" class="edit-input" placeholder="Giá tiền...">`;
-  document.getElementById(
-    "modal-desc-container"
-  ).innerHTML = `<textarea id="edit-desc-input" class="edit-textarea" placeholder="Mô tả món ăn..."></textarea>`;
+  document.getElementById("modal-title-container").innerHTML =
+    `<input type="text" id="edit-title-input" class="edit-input" placeholder="Tên món..." style="font-size: 1.5rem;">`;
+  document.getElementById("modal-price-container").innerHTML =
+    `<input type="text" id="edit-price-input" class="edit-input" placeholder="Giá tiền...">`;
+  document.getElementById("modal-desc-container").innerHTML =
+    `<textarea id="edit-desc-input" class="edit-textarea" placeholder="Mô tả món ăn..."></textarea>`;
 
   document.getElementById("btn-toggle-status").style.display = "none";
   document.getElementById("delete-btn").style.display = "none";
@@ -465,17 +462,14 @@ function showDishDetail(id) {
   currentDishId = id;
 
   if (dish) {
-    document.getElementById(
-      "modal-title-container"
-    ).innerHTML = `<h2 id="modal-title" class="modal-title">${dish.title}</h2>`;
-    document.getElementById(
-      "modal-price-container"
-    ).innerHTML = `<span id="modal-price" class="modal-price">${dish.price.toLocaleString(
-      "vi-VN"
-    )}đ</span>`;
-    document.getElementById(
-      "modal-desc-container"
-    ).innerHTML = `<p id="modal-desc" class="modal-desc">${dish.desc}</p>`;
+    document.getElementById("modal-title-container").innerHTML =
+      `<h2 id="modal-title" class="modal-title">${dish.title}</h2>`;
+    document.getElementById("modal-price-container").innerHTML =
+      `<span id="modal-price" class="modal-price">${dish.price.toLocaleString(
+        "vi-VN",
+      )}đ</span>`;
+    document.getElementById("modal-desc-container").innerHTML =
+      `<p id="modal-desc" class="modal-desc">${dish.desc}</p>`;
     document.getElementById("modal-img").src = dish.img;
     document.getElementById("img-input-container").style.display = "none";
     document.getElementById("btn-toggle-status").style.display = "inline-block";
@@ -523,15 +517,12 @@ function toggleEditMode() {
     isAddingNew = false;
   } else {
     const currentDish = menuData[currentDishId];
-    document.getElementById(
-      "modal-title-container"
-    ).innerHTML = `<input type="text" id="edit-title-input" class="edit-input" value="${currentDish.title}" style="font-size: 1.5rem; font-weight: bold;">`;
-    document.getElementById(
-      "modal-price-container"
-    ).innerHTML = `<input type="text" id="edit-price-input" class="edit-input" value="${currentDish.price}">`;
-    document.getElementById(
-      "modal-desc-container"
-    ).innerHTML = `<textarea id="edit-desc-input" class="edit-textarea">${currentDish.desc}</textarea>`;
+    document.getElementById("modal-title-container").innerHTML =
+      `<input type="text" id="edit-title-input" class="edit-input" value="${currentDish.title}" style="font-size: 1.5rem; font-weight: bold;">`;
+    document.getElementById("modal-price-container").innerHTML =
+      `<input type="text" id="edit-price-input" class="edit-input" value="${currentDish.price}">`;
+    document.getElementById("modal-desc-container").innerHTML =
+      `<textarea id="edit-desc-input" class="edit-textarea">${currentDish.desc}</textarea>`;
     document.getElementById("img-input-container").style.display = "block";
     document.getElementById("edit-img-input").value = "";
     btnText.innerText = "Lưu thay đổi";
@@ -591,7 +582,7 @@ function renderTables() {
     // Logic: Nếu đang tìm kiếm, chỉ hiện bàn nào CÓ món đó trong orders
     if (keyword !== "") {
       const hasDish = t.orders.some((order) =>
-        order.name.toLowerCase().includes(keyword)
+        order.name.toLowerCase().includes(keyword),
       );
       if (!hasDish) return; // Bỏ qua bàn này nếu không có món đang tìm
     }
@@ -602,8 +593,8 @@ function renderTables() {
       t.status === "occupied"
         ? "Có khách"
         : t.status === "reserved"
-        ? "Đặt trước"
-        : "Trống";
+          ? "Đặt trước"
+          : "Trống";
 
     // Highlight viền đỏ nếu bàn này khớp kết quả tìm kiếm để dễ nhìn
     const highlightStyle =
@@ -613,8 +604,8 @@ function renderTables() {
 
     grid.innerHTML += `
             <div class="table-card ${t.status}" onclick="openTableDetail(${
-      t.id
-    })" style="${highlightStyle}">
+              t.id
+            })" style="${highlightStyle}">
                 <div class="table-icon"><i class="fas fa-chair"></i></div>
                 <div class="table-name">${t.name}</div>
                 <div class="table-info">${t.area}</div>
@@ -622,7 +613,7 @@ function renderTables() {
                 ${
                   t.status === "occupied"
                     ? `<div style="color:#ef4444; font-size:0.85rem; margin-top:5px;">${total.toLocaleString(
-                        "vi-VN"
+                        "vi-VN",
                       )}đ</div>`
                     : ""
                 }
@@ -735,7 +726,7 @@ function updateItemStatus(index, newStatus) {
     if (newStatus === "ready")
       showAlert(
         "Món ăn sẵn sàng!",
-        `Món <b>${t.orders[index].name}</b> tại ${t.name} đã nấu xong.`
+        `Món <b>${t.orders[index].name}</b> tại ${t.name} đã nấu xong.`,
       );
     renderTableOrders(t);
   }
@@ -743,137 +734,13 @@ function updateItemStatus(index, newStatus) {
 
 // --- TRONG FILE script.js ---
 
-/* ============================================================
-   1. HÀM XỬ LÝ NÚT "THÊM MÃ" Ở MÀN HÌNH QUẢN LÝ (TÍNH NĂNG MỚI)
-   (Dùng cho ô nhập liệu như trong ảnh Sếp gửi)
-   ============================================================ */
-function addPromotion() {
-  // Lấy mã từ ô input ở màn hình quản lý (ID khác với trong modal)
-  const code = document
-    .getElementById("promo-code-input")
-    .value.toUpperCase()
-    .trim();
-  let discountRate = 0;
-
-  // Logic kiểm tra mã (Dùng chung logic Regex của Sếp)
-  if (promotions[code]) {
-    discountRate = promotions[code];
-  } else {
-    const regex = /^CHIEN([1-9]|[1-5][0-9]|60)$/;
-    const match = code.match(regex);
-    if (match) {
-      discountRate = parseInt(match[1]) / 100;
-    }
-  }
-
-  // Nếu mã hợp lệ -> Áp dụng cho TẤT CẢ bàn đang có khách
-  if (discountRate > 0) {
-    let count = 0;
-    tableData.forEach((t) => {
-      // Chỉ áp dụng bàn đang có khách (occupied) và đã gọi món
-      if (t.status === "occupied" && t.orders.length > 0) {
-        t.activeDiscountRate = discountRate; // Lưu % giảm vào dữ liệu bàn
-        t.activeDiscountCode = code; // Lưu tên mã vào dữ liệu bàn
-        count++;
-      }
-    });
-
-    if (count > 0) {
-      alert(
-        `✅ Đã áp dụng mã ${code} (Giảm ${
-          discountRate * 100
-        }%) cho ${count} bàn đang phục vụ!`
-      );
-      renderTables(); // Vẽ lại sơ đồ bàn để cập nhật (nếu cần)
-    } else {
-      alert("⚠️ Mã hợp lệ nhưng hiện tại không có bàn nào đang phục vụ!");
-    }
-  } else {
-    alert("❌ Mã giảm giá không hợp lệ hoặc sai định dạng!");
-  }
-}
-
-/* ============================================================
-   2. HÀM HIỂN THỊ CHI TIẾT ĐƠN HÀNG (CẬP NHẬT)
-   (Cần hàm này để khi mở bàn lên, nó tự hiện mã giảm giá đã nhập ở ngoài)
-   ============================================================ */
-function renderTableOrders(table) {
-  const list = document.getElementById("td-order-list");
-  list.innerHTML = "";
-  let subtotal = 0;
-
-  // Render danh sách món ăn
-  table.orders.forEach((item, index) => {
-    subtotal += item.price * item.qty;
-    // Tạo select chọn trạng thái món
-    const statusSelect = `
-            <select class="item-status-select status-${
-              item.status
-            }" onchange="updateItemStatus(${index}, this.value)">
-                <option value="cooking" ${
-                  item.status === "cooking" ? "selected" : ""
-                }>Đang làm</option>
-                <option value="ready" ${
-                  item.status === "ready" ? "selected" : ""
-                }>Sẵn sàng</option>
-                <option value="served" ${
-                  item.status === "served" ? "selected" : ""
-                }>Đã phục vụ</option>
-            </select>`;
-
-    list.innerHTML += `
-            <tr>
-                <td style="font-weight:bold;">${item.name}</td>
-                <td>${item.qty}</td>
-                <td style="color:#666; font-size:0.85rem;">${
-                  item.note || "-"
-                }</td>
-                <td>${statusSelect}</td>
-                <td style="font-weight:bold;">${(
-                  item.price * item.qty
-                ).toLocaleString("vi-VN")}đ</td>
-            </tr>`;
-  });
-
-  // --- LOGIC HIỂN THỊ GIẢM GIÁ (Kết nối với tính năng thêm mã toàn cục) ---
-  let discountAmount = 0;
-
-  // Nếu bàn này đã có mã giảm giá (từ hàm addPromotion hoặc applyPromotion lưu vào)
-  if (table.activeDiscountRate && table.activeDiscountRate > 0) {
-    discountAmount = subtotal * table.activeDiscountRate;
-    // Điền sẵn mã vào ô input trong modal để Sếp thấy
-    document.getElementById("td-promo-input").value =
-      table.activeDiscountCode || "";
-  } else {
-    document.getElementById("td-promo-input").value = "";
-  }
-
-  const finalTotal = subtotal - discountAmount;
-
-  // Cập nhật giao diện
-  document.getElementById("td-subtotal").innerText =
-    subtotal.toLocaleString("vi-VN") + "đ";
-  document.getElementById(
-    "td-discount"
-  ).innerText = `-${discountAmount.toLocaleString("vi-VN")}đ`;
-  document.getElementById("td-final-total").innerText =
-    finalTotal.toLocaleString("vi-VN") + "đ";
-
-  // Lưu tạm subtotal vào dataset để hàm applyPromotion của Sếp dùng tính toán
-  document.getElementById("td-final-total").dataset.subtotal = subtotal;
-}
-
-/* ============================================================
-   3. HÀM APPLY KHUYẾN MÃI (CODE CỦA SẾP)
-   (Tôi giữ nguyên logic, chỉ thêm đoạn lưu dữ liệu vào tableData)
-   ============================================================ */
 function applyPromotion() {
   const inputCode = document
     .getElementById("td-promo-input")
     .value.toUpperCase()
     .trim();
   const subtotal = parseInt(
-    document.getElementById("td-final-total").dataset.subtotal
+    document.getElementById("td-final-total").dataset.subtotal,
   );
 
   let discountRate = 0; // Tỉ lệ giảm (VD: 0.1 là 10%)
@@ -907,36 +774,16 @@ function applyPromotion() {
     const discountAmount = subtotal * discountRate;
     const finalTotal = subtotal - discountAmount;
 
-    document.getElementById(
-      "td-discount"
-    ).innerText = `-${discountAmount.toLocaleString("vi-VN")}đ`;
+    document.getElementById("td-discount").innerText =
+      `-${discountAmount.toLocaleString("vi-VN")}đ`;
     document.getElementById("td-final-total").innerText =
       finalTotal.toLocaleString("vi-VN") + "đ";
-
-    // --- [ĐOẠN MỚI THÊM VÀO] ---
-    // Lưu trạng thái vào dữ liệu gốc để khi đóng modal không bị mất
-    const t = tableData.find((x) => x.id === currentTableId);
-    if (t) {
-      t.activeDiscountRate = discountRate;
-      t.activeDiscountCode = inputCode;
-    }
-    // ---------------------------
 
     // Hiển thị phần trăm giảm để dễ check
     const percent = discountRate * 100;
     showAlert("Thành công!", `Đã áp dụng mã ${inputCode} (Giảm ${percent}%)`);
   } else {
     alert("Mã giảm giá không hợp lệ hoặc vượt quá giới hạn (1-60%)!");
-
-    // --- [ĐOẠN MỚI THÊM VÀO] ---
-    // Nếu mã sai thì reset lại dữ liệu gốc của bàn
-    const t = tableData.find((x) => x.id === currentTableId);
-    if (t) {
-      t.activeDiscountRate = 0;
-      t.activeDiscountCode = "";
-    }
-    // ---------------------------
-
     // Reset lại nếu mã sai
     document.getElementById("td-discount").innerText = "-0đ";
     document.getElementById("td-final-total").innerText =
@@ -973,7 +820,7 @@ function checkoutTable() {
       closeModal("tableDetailModal");
       showAlert(
         "Thanh toán thành công!",
-        `Bàn ${t.name} đã thanh toán ${totalStr}.`
+        `Bàn ${t.name} đã thanh toán ${totalStr}.`,
       );
     }
   } else {
@@ -987,7 +834,7 @@ function printTableQR() {
   const qrSrc = document.getElementById("td-qr-img").src;
   const printWindow = window.open("", "", "height=600,width=500");
   printWindow.document.write(
-    `<html><head><title>In QR</title><style>body{display:flex;justify-content:center;align-items:center;height:100vh;margin:0;}.card{text-align:center;border:2px dashed #333;padding:20px;width:300px;}</style></head><body><div class="card"><h1>${table.name}</h1><img src="${qrSrc}" width="200"><p>Quét để gọi món</p></div></body></html>`
+    `<html><head><title>In QR</title><style>body{display:flex;justify-content:center;align-items:center;height:100vh;margin:0;}.card{text-align:center;border:2px dashed #333;padding:20px;width:300px;}</style></head><body><div class="card"><h1>${table.name}</h1><img src="${qrSrc}" width="200"><p>Quét để gọi món</p></div></body></html>`,
   );
   printWindow.document.close();
   printWindow.focus();
@@ -1012,7 +859,7 @@ function renderTableHistory(table) {
       : table.history
           .map(
             (h) =>
-              `<li class="history-item"><span class="history-info">${h.info}</span><span class="history-time">${h.time}</span></li>`
+              `<li class="history-item"><span class="history-info">${h.info}</span><span class="history-time">${h.time}</span></li>`,
           )
           .join("");
 }
@@ -1046,7 +893,7 @@ function openOrderDetail(id) {
     document.getElementById("order-items-list").innerHTML = order.items
       .map(
         (item) =>
-          `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span><b>${item.qty}x</b> ${item.name}</span><span>${item.price}</span></div>`
+          `<div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span><b>${item.qty}x</b> ${item.name}</span><span>${item.price}</span></div>`,
       )
       .join("");
     document.getElementById("orderModal").style.display = "block";
@@ -1200,7 +1047,7 @@ function renderNotifications() {
           n.icon
         }</div><div class="noti-content"><div class="noti-title">${
           n.message
-        }</div><div class="noti-time">${n.time}</div></div></div>`
+        }</div><div class="noti-time">${n.time}</div></div></div>`,
     )
     .join("");
 }
@@ -1221,7 +1068,7 @@ function showAlert(title, msg) {
   document.getElementById("alert-toast").classList.add("show");
   setTimeout(
     () => document.getElementById("alert-toast").classList.remove("show"),
-    5000
+    5000,
   );
 }
 function closeAlert() {
@@ -1342,7 +1189,7 @@ function toggleChatbot() {
   // KIỂM TRA AN TOÀN: Nếu không tìm thấy khung chat thì dừng lại và báo lỗi ngầm
   if (!chat) {
     console.error(
-      "Lỗi: Không tìm thấy phần tử HTML có id='chatbot-widget'. Hãy kiểm tra lại file HTML."
+      "Lỗi: Không tìm thấy phần tử HTML có id='chatbot-widget'. Hãy kiểm tra lại file HTML.",
     );
     return;
   }
@@ -1478,7 +1325,7 @@ async function callGeminiAI(userMsg) {
 
   if (!APP_TOKEN) {
     throw new Error(
-      "Không có token frontend (APP_TOKEN). Vui lòng kiểm tra server render."
+      "Không có token frontend (APP_TOKEN). Vui lòng kiểm tra server render.",
     );
   }
 
@@ -1501,7 +1348,7 @@ async function callGeminiAI(userMsg) {
     }
     // Ném error cho gọi caller xử lý
     throw new Error(
-      err.error?.detail || err.error || err.message || JSON.stringify(err)
+      err.error?.detail || err.error || err.message || JSON.stringify(err),
     );
   }
 
@@ -1549,5 +1396,12 @@ async function sendChatMessage() {
         : err.message || "Không thể kết nối tới dịch vụ AI.";
     console.error("AI call error:", err);
     addMessage(`⚠️ Lỗi: ${safeMsg}`, "bot");
+  }
+}
+// --- CHỨC NĂNG ĐĂNG XUẤT ---
+function handleLogout() {
+  if (confirm("Bạn có chắc chắn muốn đăng xuất không ?")) {
+    // Chuyển hướng về trang đăng nhập
+    window.location.href = "login.html";
   }
 }
