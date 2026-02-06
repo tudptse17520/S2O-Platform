@@ -9,3 +9,7 @@ instance/
 .pytest_cache/
 coverage.xml
 *.log
+tests/
+test_apis.py
+test_login.py
+pytest.ini
